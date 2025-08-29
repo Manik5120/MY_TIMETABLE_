@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Timetable</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+
+<body class="bg-gray-100 font-sans antialiased">
+    
+    <!-- Navbar -->
+    <nav class="bg-blue-600 p-4 text-white flex justify-between">
+        <div>
+            <h1 class="text-3xl font-bold">Timetable Generator</h1>
+        </div>
+        <div>
+            <a href="#" class="text-white hover:underline mx-4">Welcome {{ user.username }}</a>
+            <a href="/view-timetable" class="text-white hover:underline mx-4">View Timetable</a>
+            <a href="#" class="text-white hover:underline">Logout</a>
+        </div>
+    </nav>
+
+    <!-- Main Content Container -->
+    <div class="container mx-auto mt-10 px-4 sm:px-0">
+        <div class="max-w-3xl mx-auto bg-white p-6 rounded-lg shadow-md">
+
+            <!-- Section A Timetable -->
+            <section>
+                <h2 class="text-xl mb-4 font-semibold">Section A Timetable</h2>
+                
+                <div class="overflow-x-auto">
+                    <table class="min-w-full table-auto border-collapse">
+                        <thead>
+                            <tr class="bg-blue-600 text-white">
+                                <th class="border border-gray-300 p-2 text-center">Day / Time</th>
+                                <th class="border border-gray-300 p-2 text-center">9:00-9:50</th>
+                                <th class="border border-gray-300 p-2 text-center">9:50-10:40</th>
+                                <th class="border border-gray-300 p-2 text-center">10:40-11:30</th>
+                                <th class="border border-gray-300 p-2 text-center">11:30-12:20</th>
+                                <th class="border border-gray-300 p-2 text-center">12:00-1:10</th>
+                                <th class="border border-gray-300 p-2 text-center">1:10-2:00</th>
+                                <th class="border border-gray-300 p-2 text-center">2:00-2:50</th>
+                                <th class="border border-gray-300 p-2 text-center">2:50-3:40</th>
+                                <th class="border border-gray-300 p-2 text-center">3:40-4:30</th>
+                                <th class="border border-gray-300 p-2 text-center">4:30-5:20</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for day in ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"] %}
+                            <tr class="border-b">
+                                <td class="bg-gray-200 text-center font-semibold p-2 border border-gray-300">{{ day }}</td>
+                                {% for time_slot in section_a_timetable[day] %}
+                                    <td class="text-center p-2 border border-gray-300">
+                                        {% if time_slot %}
+                                            <div class="font-semibold">{{ time_slot.subject }}</div>
+                                            <div class="text-sm text-gray-500">{{ time_slot.faculty }}</div>
+                                        {% else %}
+                                            <div class="text-gray-400">No Class</div>
+                                        {% endif %}
+                                    </td>
+                                {% endfor %}
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- Section B Timetable -->
+            <section class="mt-8">
+                <h2 class="text-xl mb-4 font-semibold">Section B Timetable</h2>
+
+                <div class="overflow-x-auto">
+                    <table class="min-w-full table-auto border-collapse">
+                        <thead>
+                            <tr class="bg-blue-600 text-white">
+                                <th class="border border-gray-300 p-2 text-center">Day / Time</th>
+                                <th class="border border-gray-300 p-2 text-center">9:00-9:50</th>
+                                <th class="border border-gray-300 p-2 text-center">9:50-10:40</th>
+                                <th class="border border-gray-300 p-2 text-center">10:40-11:30</th>
+                                <th class="border border-gray-300 p-2 text-center">11:30-12:20</th>
+                                <th class="border border-gray-300 p-2 text-center">12:00-1:10</th>
+                                <th class="border border-gray-300 p-2 text-center">1:10-2:00</th>
+                                <th class="border border-gray-300 p-2 text-center">2:00-2:50</th>
+                                <th class="border border-gray-300 p-2 text-center">2:50-3:40</th>
+                                <th class="border border-gray-300 p-2 text-center">3:40-4:30</th>
+                                <th class="border border-gray-300 p-2 text-center">4:30-5:20</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for day in ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"] %}
+                            <tr class="border-b">
+                                <td class="bg-gray-200 text-center font-semibold p-2 border border-gray-300">{{ day }}</td>
+                                {% for time_slot in section_b_timetable[day] %}
+                                    <td class="text-center p-2 border border-gray-300">
+                                        {% if time_slot %}
+                                            <div class="font-semibold">{{ time_slot.subject }}</div>
+                                            <div class="text-sm text-gray-500">{{ time_slot.faculty }}</div>
+                                        {% else %}
+                                            <div class="text-gray-400">No Class</div>
+                                        {% endif %}
+                                    </td>
+                                {% endfor %}
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+        </div>
+    </div>
+</body>
+</html>

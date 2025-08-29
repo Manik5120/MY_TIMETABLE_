@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generate Timetable</title>
+</head>
+<body>
+    <h2>Generate Timetable</h2>
+    <form method="POST">
+        {% csrf_token %}
+        <div id="subject-fields">
+            <div class="subject-entry">
+                <label for="faculty">Faculty Name:</label>
+                <input type="text" name="faculty[]" required>
+
+                <label for="subject">Subject Name:</label>
+                <input type="text" name="subjects[]" required>
+
+                <label for="credits">Credits:</label>
+                <input type="number" name="credits[]" min="1" required>
+            </div>
+        </div>
+
+        <button type="button" onclick="addSubjectField()">Add Another Subject</button>
+        <button type="submit">Generate Timetable</button>
+    </form>
+
+    <script>
+        function addSubjectField() {
+            const subjectFields = document.getElementById("subject-fields");
+            const newField = document.createElement("div");
+            newField.classList.add("subject-entry");
+            newField.innerHTML = `
+                <label for="faculty">Faculty Name:</label>
+                <input type="text" name="faculty[]" required>
+
+                <label for="subject">Subject Name:</label>
+                <input type="text" name="subjects[]" required>
+
+                <label for="credits">Credits:</label>
+                <input type="number" name="credits[]" min="1" required>
+            `;
+            subjectFields.appendChild(newField);
+        }
+    </script>
+</body>
+</html>

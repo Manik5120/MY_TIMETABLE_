@@ -1,0 +1,16 @@
+services:
+  - type: web
+    name: my-timetable
+    env: python
+    buildCommand: "cd backend && pip install -r requirements.txt && python manage.py collectstatic --noinput"
+    startCommand: "cd backend && python manage.py migrate && python manage.py create_timeslots && gunicorn my_timetable.wsgi:application"
+    envVars:
+      - key: DJANGO_SETTINGS_MODULE
+        value: my_timetable.settings_production
+      - key: PYTHON_VERSION
+        value: 3.9.18
+
+databases:
+  - name: my-timetable-db
+    databaseName: timetable_db
+    user: timetable_user
