@@ -1,0 +1,8 @@
+[build]
+builder = "nixpacks"
+
+[deploy]
+startCommand = "cd backend && python manage.py collectstatic --noinput && python manage.py migrate && python manage.py create_timeslots && gunicorn --bind 0.0.0.0:$PORT my_timetable.wsgi:application"
+healthcheckPath = "/"
+healthcheckTimeout = 100
+restartPolicyType = "on_failure"
