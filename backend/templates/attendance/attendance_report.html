@@ -1,0 +1,89 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>
+        Attendance Report - {{ subject.name }}
+        {% if selected_student_id %}
+            {% with student=students.first %}
+                - {{ student.name }} ({{ student.roll_number }})
+            {% endwith %}
+        {% else %}
+            - Section {{ current_section }}
+        {% endif %}
+    </h2>
+
+    <div class="card mb-4">
+        <div class="card-body">
+            <form method="get" class="row g-3">
+                {% if not selected_student_id %}
+                <div class="col-md-3">
+                    <label class="form-label">Section</label>
+                    <select name="section" class="form-select">
+                        <option value="A" {% if current_section == 'A' %}selected{% endif %}>Section A</option>
+                        <option value="B" {% if current_section == 'B' %}selected{% endif %}>Section B</option>
+                    </select>
+                </div>
+                {% endif %}
+                
+                <div class="col-md-3">
+                    <label class="form-label">Start Date</label>
+                    <input type="date" name="start_date" class="form-control" value="{{ start_date }}">
+                </div>
+                
+                <div class="col-md-3">
+                    <label class="form-label">End Date</label>
+                    <input type="date" name="end_date" class="form-control" value="{{ end_date }}">
+                </div>
+                
+                <div class="col-md-3 d-flex align-items-end">
+                    {% if selected_student_id %}
+                        <input type="hidden" name="student_id" value="{{ selected_student_id }}">
+                    {% endif %}
+                    <button type="submit" class="btn btn-primary">Filter</button>
+                    {% if selected_student_id %}
+                        <a href="{% url 'attendance_report' subject_id=subject.id %}" class="btn btn-outline-secondary ms-2">View All</a>
+                    {% endif %}
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Roll Number</th>
+                            <th>Name</th>
+                            <th class="text-center">Total Classes</th>
+                            <th class="text-center">Present</th>
+                            <th class="text-center">Attendance %</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for record in attendance_records %}
+                        <tr>
+                            <td>{{ record.student.roll_number }}</td>
+                            <td>{{ record.student.name }}</td>
+                            <td class="text-center">{{ record.total_classes }}</td>
+                            <td class="text-center">{{ record.present_count }}</td>
+                            <td class="text-center">
+                                <span class="badge {% if record.percentage >= 75 %}bg-success{% else %}bg-danger{% endif %}">
+                                    {{ record.percentage }}%
+                                </span>
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="5" class="text-center">No attendance records found.</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-4 mb-5 pb-4">
+    <div class="card">
+        <div class="card-header">
+            <div class="d-flex justify-content-between align-items-center">
+                <h3>Timetable - Section {{ current_section }}</h3>
+                <div>
+                    <a href="?section=A" class="btn btn-sm btn-{% if current_section == 'A' %}primary{% else %}outline-primary{% endif %}">Section A</a>
+                    <a href="?section=B" class="btn btn-sm btn-{% if current_section == 'B' %}primary{% else %}outline-primary{% endif %}">Section B</a>
+                </div>
+            </div>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>Time</th>
+                            {% for day_code, day_name in days %}
+                                <th>{{ day_name }}</th>
+                            {% endfor %}
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for row in timetable_cells %}
+                            <tr>
+                                <td class="text-nowrap">{{ row.time }}</td>
+                                {% for cell in row.cells %}
+                                    <td>
+                                        {% if cell.type == 'lunch' %}
+                                            <span class="badge bg-warning">{{ cell.content }}</span>
+                                        {% elif cell.type == 'free' %}
+                                            <span class="badge bg-secondary">{{ cell.content }}</span>
+                                        {% else %}
+                                            <div class="text-wrap" style="white-space: pre-line;">{{ cell.content }}</div>
+                                        {% endif %}
+                                    </td>
+                                {% endfor %}
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

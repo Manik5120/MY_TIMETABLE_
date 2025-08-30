@@ -1,0 +1,80 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>Lecture Content</h2>
+        <a href="{% url 'add_lecture_content' %}" class="btn btn-primary">Add New Content</a>
+    </div>
+
+    <div class="card mb-4">
+        <div class="card-body">
+            <form method="get" class="row g-3">
+                <div class="col-md-4">
+                    <label class="form-label">Subject</label>
+                    <select name="subject" class="form-select">
+                        <option value="">All Subjects</option>
+                        {% for subject in subjects %}
+                        <option value="{{ subject.id }}" {% if subject.id|stringformat:"s" == current_subject %}selected{% endif %}>
+                            {{ subject.name }}
+                        </option>
+                        {% endfor %}
+                    </select>
+                </div>
+                
+                <div class="col-md-4">
+                    <label class="form-label">Section</label>
+                    <select name="section" class="form-select">
+                        <option value="A" {% if current_section == 'A' %}selected{% endif %}>Section A</option>
+                        <option value="B" {% if current_section == 'B' %}selected{% endif %}>Section B</option>
+                    </select>
+                </div>
+                
+                <div class="col-md-4 d-flex align-items-end">
+                    <button type="submit" class="btn btn-primary">Filter</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-body">
+            {% for content in lecture_contents %}
+            <div class="lecture-content-item mb-4 p-3 border rounded {% if not forloop.last %}border-bottom{% endif %}">
+                <div class="d-flex justify-content-between align-items-start mb-2">
+                    <h5 class="mb-0">{{ content.subject.name }} - Section {{ content.section }}</h5>
+                    <span class="badge bg-secondary">{{ content.date|date:"d M Y" }}</span>
+                </div>
+                
+                <div class="topics mb-3">
+                    <strong>Topics Covered:</strong>
+                    <p class="mb-2">{{ content.topic_covered|linebreaks }}</p>
+                </div>
+                
+                {% if content.resources %}
+                <div class="resources mb-3">
+                    <strong>Resources:</strong>
+                    <p class="mb-2">{{ content.resources|urlize|linebreaks }}</p>
+                </div>
+                {% endif %}
+                
+                {% if content.remarks %}
+                <div class="remarks">
+                    <strong>Remarks:</strong>
+                    <p class="mb-0">{{ content.remarks|linebreaks }}</p>
+                </div>
+                {% endif %}
+                
+                <div class="text-muted mt-2">
+                    <small>Added by: {{ content.faculty.name }}</small>
+                </div>
+            </div>
+            {% empty %}
+            <div class="text-center py-4">
+                <p class="mb-0">No lecture content found.</p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %} 

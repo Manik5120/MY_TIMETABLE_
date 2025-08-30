@@ -1,0 +1,77 @@
+{% extends 'base.html' %}
+{% load custom_filters %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2 class="text-center mb-4">Timetable for Section {{ current_section }}</h2>
+    
+    <div class="text-center mb-3">
+        <a href="?section=A" class="btn btn-{% if current_section == 'A' %}primary{% else %}outline-primary{% endif %} me-2">Section A</a>
+        <a href="?section=B" class="btn btn-{% if current_section == 'B' %}primary{% else %}outline-primary{% endif %}">Section B</a>
+    </div>
+
+    <div class="table-responsive">
+        <table class="table table-bordered table-hover">
+            <thead class="table-dark">
+                <tr>
+                    <th>Time</th>
+                    {% for slot in time_slots %}
+                        <th>{{ slot.start_time }} - {{ slot.end_time }}</th>
+                    {% endfor %}
+                </tr>
+            </thead>
+            <tbody>
+                {% for day_code, day_name in days %}
+                <tr>
+                    <td class="text-center align-middle fw-bold bg-light">{{ day_name }}</td>
+                    {% for slot in time_slots %}
+                    <td class="text-center align-middle {% if 'Lunch Break' in timetable_matrix|get_item:day_code|get_item:slot.slot_number %}table-warning{% elif 'Lab' in timetable_matrix|get_item:day_code|get_item:slot.slot_number %}table-info{% elif timetable_matrix|get_item:day_code|get_item:slot.slot_number == 'Free' %}table-light{% else %}table-success{% endif %}">
+                        {{ timetable_matrix|get_item:day_code|get_item:slot.slot_number|linebreaks }}
+                    </td>
+                    {% endfor %}
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <div class="mt-4">
+        <h5>Legend:</h5>
+        <div class="d-flex flex-wrap gap-3">
+            <div class="p-2 table-success">Theory Classes</div>
+            <div class="p-2 table-info">Lab Classes</div>
+            <div class="p-2 table-warning">Lunch Break</div>
+            <div class="p-2 table-light">Free Slot</div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .time-slot {
+        font-size: 0.9rem;
+        font-weight: bold;
+        color: white;
+    }
+    
+    td {
+        font-size: 0.9rem;
+        padding: 10px !important;
+    }
+    
+    .table-responsive {
+        box-shadow: 0 0 20px rgba(0,0,0,0.1);
+        border-radius: 8px;
+        overflow: hidden;
+    }
+    
+    .table {
+        margin-bottom: 0;
+    }
+    
+    .legend-item {
+        padding: 5px 10px;
+        border-radius: 4px;
+        margin: 5px;
+    }
+</style>
+{% endblock %} 

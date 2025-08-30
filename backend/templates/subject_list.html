@@ -1,0 +1,73 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-4 mb-4">
+    <div class="card">
+        <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+            <div class="d-flex align-items-center">
+                <h4 class="mb-0 me-3">Subjects</h4>
+                <select class="form-select form-select-sm" style="width: auto;" onchange="window.location.href='?faculty=' + this.value">
+                    <option value="">All Faculties</option>
+                    {% for faculty in faculties %}
+                        <option value="{{ faculty.id }}" {% if current_faculty.id == faculty.id %}selected{% endif %}>
+                            {{ faculty.name }} ({{ faculty.department }})
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
+            <a href="{% url 'add_subject' %}" class="btn btn-light">
+                <i class="fas fa-plus me-2"></i>Add Subject
+            </a>
+        </div>
+        <div class="card-body">
+            {% if subjects %}
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Subject Name</th>
+                                <th>Faculty</th>
+                                <th>Department</th>
+                                <th>Type</th>
+                                <th>Credits</th>
+                                <th>Classes/Week</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for subject in subjects %}
+                                <tr>
+                                    <td>{{ subject.name }}</td>
+                                    <td>{{ subject.faculty.name }}</td>
+                                    <td>{{ subject.faculty.department }}</td>
+                                    <td>
+                                        <span class="badge {% if subject.is_lab %}bg-warning{% else %}bg-primary{% endif %}">
+                                            {% if subject.is_lab %}Laboratory{% else %}Theory{% endif %}
+                                        </span>
+                                    </td>
+                                    <td>{{ subject.credits }}</td>
+                                    <td>{{ subject.classes_per_week }}</td>
+                                    <td>
+                                        <a href="{% url 'delete_subject' subject.id %}" class="btn btn-danger btn-sm" 
+                                           onclick="return confirm('Are you sure you want to delete this subject?')">
+                                            <i class="fas fa-trash me-1"></i>Delete
+                                        </a>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% else %}
+                <div class="text-center py-4">
+                    <i class="fas fa-book fa-3x text-muted mb-3"></i>
+                    <p class="lead">No subjects found.</p>
+                    <a href="{% url 'add_subject' %}" class="btn btn-primary">
+                        <i class="fas fa-plus me-2"></i>Add Your First Subject
+                    </a>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %} 

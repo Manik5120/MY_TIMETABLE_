@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>Add Lecture Content</h2>
+
+    <div class="card">
+        <div class="card-body">
+            <form method="post">
+                {% csrf_token %}
+                
+                <div class="row mb-3">
+                    <div class="col-md-4">
+                        <label class="form-label">Subject</label>
+                        <select name="subject" class="form-select" required>
+                            <option value="">Select Subject</option>
+                            {% for subject in subjects %}
+                            <option value="{{ subject.id }}">{{ subject.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    
+                    <div class="col-md-4">
+                        <label class="form-label">Section</label>
+                        <select name="section" class="form-select" required>
+                            <option value="A">Section A</option>
+                            <option value="B">Section B</option>
+                        </select>
+                    </div>
+                    
+                    <div class="col-md-4">
+                        <label class="form-label">Date</label>
+                        <input type="date" name="date" class="form-control" value="{{ date }}" required>
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Topics Covered</label>
+                    <textarea name="topic_covered" class="form-control" rows="3" required></textarea>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Resources (Optional)</label>
+                    <textarea name="resources" class="form-control" rows="2" placeholder="Add links to study materials, presentations, etc."></textarea>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Remarks (Optional)</label>
+                    <textarea name="remarks" class="form-control" rows="2" placeholder="Any additional notes or remarks"></textarea>
+                </div>
+
+                <div class="text-end">
+                    <button type="submit" class="btn btn-primary">Save Lecture Content</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %} 

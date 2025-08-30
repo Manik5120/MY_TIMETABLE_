@@ -1,0 +1,115 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-3">
+            <div class="card text-white bg-primary mb-4">
+                <div class="card-body">
+                    <h5 class="card-title">Total Faculties</h5>
+                    <p class="display-4">{{ total_faculties }}</p>
+                    <a href="{% url 'faculty_list' %}" class="text-white">View All <i class="fas fa-arrow-right"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card text-white bg-success mb-4">
+                <div class="card-body">
+                    <h5 class="card-title">Total Subjects</h5>
+                    <p class="display-4">{{ total_subjects }}</p>
+                    <a href="{% url 'subject_list' %}" class="text-white">View All <i class="fas fa-arrow-right"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card text-white bg-warning mb-4">
+                <div class="card-body">
+                    <h5 class="card-title">Lab Subjects</h5>
+                    <p class="display-4">{{ lab_subjects }}</p>
+                    <a href="{% url 'subject_list' %}" class="text-white">View All <i class="fas fa-arrow-right"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card text-white bg-info mb-4">
+                <div class="card-body">
+                    <h5 class="card-title">Theory Subjects</h5>
+                    <p class="display-4">{{ theory_subjects }}</p>
+                    <a href="{% url 'subject_list' %}" class="text-white">View All <i class="fas fa-arrow-right"></i></a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mb-4">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header">
+                    <h4>Recent Faculty List</h4>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Department</th>
+                                    <th>Subjects</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for faculty in faculties|slice:":5" %}
+                                    <tr>
+                                        <td>{{ faculty.name }}</td>
+                                        <td>{{ faculty.department }}</td>
+                                        <td>
+                                            <span class="badge bg-primary">
+                                                {{ faculty.subject_set.count }} subjects
+                                            </span>
+                                        </td>
+                                        <td>
+                                            <a href="{% url 'faculty_availability' faculty.id %}" class="btn btn-sm btn-primary">
+                                                <i class="fas fa-clock me-1"></i>Set Availability
+                                            </a>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    {% if faculties.count > 5 %}
+                        <div class="text-center mt-3">
+                            <a href="{% url 'faculty_list' %}" class="btn btn-primary">View All Faculties</a>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-header">
+                    <h4>Quick Actions</h4>
+                </div>
+                <div class="card-body">
+                    <div class="d-grid gap-3">
+                        <a href="{% url 'add_faculty' %}" class="btn btn-primary">
+                            <i class="fas fa-user-plus me-2"></i>Add New Faculty
+                        </a>
+                        <a href="{% url 'add_subject' %}" class="btn btn-success">
+                            <i class="fas fa-book-medical me-2"></i>Add New Subject
+                        </a>
+                        <a href="{% url 'generate_timetable' %}" class="btn btn-warning">
+                            <i class="fas fa-magic me-2"></i>Generate Timetable
+                        </a>
+                        <a href="{% url 'view_timetable' %}" class="btn btn-info">
+                            <i class="fas fa-table me-2"></i>View Timetable
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

@@ -1,0 +1,159 @@
+{% extends 'base.html' %}
+{% load custom_filters %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h4>Set Your Availability</h4>
+                <div class="btn-group">
+                    <button type="button" class="btn btn-outline-primary" onclick="selectAll()">
+                        <i class="fas fa-check-square me-2"></i>Select All
+                    </button>
+                    <button type="button" class="btn btn-outline-secondary" onclick="deselectAll()">
+                        <i class="fas fa-square me-2"></i>Clear All
+                    </button>
+                </div>
+            </div>
+            <div class="card-body">
+                <form method="post" id="availabilityForm">
+                    {% csrf_token %}
+                    <div class="table-responsive">
+                        <table class="table table-bordered">
+                            <thead class="table-light">
+                                <tr>
+                                    <th style="width: 150px;">Time Slot</th>
+                                    {% for day, day_name in days %}
+                                        <th class="text-center">{{ day_name }}</th>
+                                    {% endfor %}
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for slot in time_slots %}
+                                    <tr>
+                                        <td class="table-light"><strong>{{ slot.display }}</strong></td>
+                                        {% for day, _ in days %}
+                                            <td class="text-center">
+                                                <div class="form-check d-flex justify-content-center">
+                                                    <input class="form-check-input availability-checkbox" type="checkbox" 
+                                                           name="{{ day }}_{{ slot.slot_number }}"
+                                                           id="{{ day }}_{{ slot.slot_number }}"
+                                                           {% if availability_matrix|get_item:day|get_item:slot.slot_number|default:False %}checked{% endif %}>
+                                                </div>
+                                            </td>
+                                        {% endfor %}
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="d-grid gap-2 col-md-6 mx-auto mt-4">
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-save me-2"></i>Save Availability
+                        </button>
+                        <a href="{% url 'dashboard' %}" class="btn btn-secondary">
+                            <i class="fas fa-times me-2"></i>Cancel
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="card mb-4">
+            <div class="card-header">
+                <h4>Faculty Information</h4>
+            </div>
+            <div class="card-body">
+                <p><strong>Name:</strong> {{ faculty.name }}</p>
+                <p><strong>Email:</strong> {{ faculty.email }}</p>
+                <p><strong>Total Available Slots:</strong> 
+                    <span class="badge bg-success">{{ total_available_slots }} slots</span>
+                </p>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                <h4>My Subjects</h4>
+            </div>
+            <div class="card-body">
+                {% if subjects %}
+                    <div class="list-group">
+                        {% for subject in subjects %}
+                            <div class="list-group-item">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <h6 class="mb-1">{{ subject.name }}</h6>
+                                    <span class="badge {% if subject.is_lab %}bg-warning{% else %}bg-primary{% endif %}">
+                                        {% if subject.is_lab %}Lab{% else %}Theory{% endif %}
+                                    </span>
+                                </div>
+                                <p class="mb-1">
+                                    <small class="text-muted">
+                                        Required slots: 
+                                        {% if subject.is_lab %}
+                                            {{ subject.classes_per_week|multiply:2 }} ({{ subject.classes_per_week }} sessions × 2 hours)
+                                        {% else %}
+                                            {{ subject.classes_per_week }}
+                                        {% endif %}
+                                    </small>
+                                </p>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <p class="text-center">No subjects added yet.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="card mt-4">
+    <div class="card-header">
+        <h4>Instructions</h4>
+    </div>
+    <div class="card-body">
+        <ul class="list-group list-group-flush">
+            <li class="list-group-item">
+                <i class="fas fa-check-square me-2 text-success"></i>
+                Check the boxes for the time slots when you are available to teach.
+            </li>
+            <li class="list-group-item">
+                <i class="fas fa-times-circle me-2 text-danger"></i>
+                Leave boxes unchecked for times when you are not available.
+            </li>
+            <li class="list-group-item">
+                <i class="fas fa-clock me-2 text-warning"></i>
+                For lab sessions, make sure you are available for consecutive slots.
+            </li>
+            <li class="list-group-item">
+                <i class="fas fa-calculator me-2 text-info"></i>
+                Make sure you have enough available slots for all your subjects:
+                <ul class="mt-2">
+                    <li>Theory subjects need 1 slot per session</li>
+                    <li>Lab subjects need 2 consecutive slots per session</li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+</div>
+
+{% block extra_js %}
+<script>
+function selectAll() {
+    document.querySelectorAll('.availability-checkbox').forEach(checkbox => {
+        checkbox.checked = true;
+    });
+}
+
+function deselectAll() {
+    document.querySelectorAll('.availability-checkbox').forEach(checkbox => {
+        checkbox.checked = false;
+    });
+}
+</script>
+{% endblock %}
+{% endblock %} 

@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="row justify-content-center mt-4">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header">
+                <h4 class="mb-0">Add New Subject</h4>
+            </div>
+            <div class="card-body">
+                <form method="post">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label for="faculty" class="form-label">Faculty</label>
+                        <select class="form-select" id="faculty" name="faculty" required>
+                            <option value="">Select Faculty</option>
+                            {% for faculty in faculties %}
+                                <option value="{{ faculty.id }}">{{ faculty.name }} ({{ faculty.department }})</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="name" class="form-label">Subject Name</label>
+                        <input type="text" class="form-control" id="name" name="name" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="credits" class="form-label">Credits</label>
+                        <input type="number" class="form-control" id="credits" name="credits" min="1" max="5" required>
+                    </div>
+                    <div class="mb-3">
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="is_lab" name="is_lab">
+                            <label class="form-check-label" for="is_lab">
+                                Is Laboratory Subject
+                            </label>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="classes_per_week" class="form-label">Classes per Week</label>
+                        <input type="number" class="form-control" id="classes_per_week" name="classes_per_week" 
+                               min="1" max="10" value="4" required>
+                    </div>
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-plus me-2"></i>Add Subject
+                        </button>
+                        <a href="{% url 'subject_list' %}" class="btn btn-secondary">
+                            <i class="fas fa-times me-2"></i>Cancel
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

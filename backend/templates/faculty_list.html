@@ -1,0 +1,104 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="card">
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <h4>Faculty List</h4>
+            <a href="{% url 'add_faculty' %}" class="btn btn-primary">
+                <i class="fas fa-plus me-2"></i>Add Faculty
+            </a>
+        </div>
+        <div class="card-body">
+            {% if faculties %}
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Email</th>
+                                <th>Subjects</th>
+                                <th>Available Slots</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for faculty in faculties %}
+                                <tr>
+                                    <td>{{ faculty.name }}</td>
+                                    <td>{{ faculty.email }}</td>
+                                    <td>
+                                        {% with subject_count=faculty.subject_set.count %}
+                                            <span class="badge bg-primary">{{ subject_count }} subject{{ subject_count|pluralize }}</span>
+                                        {% endwith %}
+                                    </td>
+                                    <td>
+                                        {% with slot_count=faculty.availability_set.filter.count %}
+                                            <span class="badge bg-success">{{ slot_count }} slots</span>
+                                        {% endwith %}
+                                    </td>
+                                    <td>
+                                        <div class="btn-group">
+                                            <a href="{% url 'faculty_availability' faculty.id %}" class="btn btn-primary btn-sm">
+                                                <i class="fas fa-clock me-1"></i>Set Availability
+                                            </a>
+                                            <a href="{% url 'subject_list' %}?faculty={{ faculty.id }}" class="btn btn-info btn-sm">
+                                                <i class="fas fa-book me-1"></i>Subjects
+                                            </a>
+                                            <a href="{% url 'delete_faculty' faculty.id %}" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete this faculty? This will also delete all associated subjects and availability.');">
+                                                <i class="fas fa-trash me-1"></i>Delete
+                                            </a>
+                                        </div>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% else %}
+                <div class="text-center py-4">
+                    <i class="fas fa-users fa-3x text-muted mb-3"></i>
+                    <p class="lead">No faculty members found.</p>
+                    <a href="{% url 'add_faculty' %}" class="btn btn-primary">
+                        <i class="fas fa-plus me-2"></i>Add Your First Faculty
+                    </a>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="card mt-4 mb-4">
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <h4>Timetable Actions</h4>
+            <div class="btn-group">
+                <a href="{% url 'generate_timetable' %}" class="btn btn-warning">
+                    <i class="fas fa-magic me-2"></i>Generate Timetable
+                </a>
+                <a href="{% url 'view_timetable' %}" class="btn btn-info">
+                    <i class="fas fa-table me-2"></i>View Timetable
+                </a>
+            </div>
+        </div>
+        <div class="card-body">
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item">
+                    <i class="fas fa-info-circle me-2 text-primary"></i>
+                    Add faculty members and set their availability.
+                </li>
+                <li class="list-group-item">
+                    <i class="fas fa-book me-2 text-success"></i>
+                    Add subjects for each faculty member.
+                </li>
+                <li class="list-group-item">
+                    <i class="fas fa-clock me-2 text-warning"></i>
+                    Set availability for each faculty member.
+                </li>
+                <li class="list-group-item">
+                    <i class="fas fa-magic me-2 text-info"></i>
+                    Generate the timetable once all information is set.
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+{% endblock %} 
