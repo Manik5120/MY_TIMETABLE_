@@ -8,12 +8,8 @@ import random
 from django.utils import timezone
 
 def home_view(request):
-    """Handle the root URL - redirect authenticated users to dashboard, others to login"""
-    if request.user.is_authenticated:
-        return redirect('dashboard')
-    else:
-        # Instead of redirecting, render the login page directly
-        return render(request, 'login.html')
+    """Handle the root URL - show login page for everyone"""
+    return render(request, 'login.html')
 
 def login_view(request):
     # If user is already authenticated, redirect to dashboard
