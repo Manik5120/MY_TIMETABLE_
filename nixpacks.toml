@@ -1,8 +1,8 @@
 [phases.setup]
-nixPkgs = ["python39", "python39Packages.pip"]
+nixPkgs = ["python39", "python39Packages.django", "python39Packages.pillow", "python39Packages.gunicorn", "python39Packages.psycopg2", "python39Packages.python-decouple", "python39Packages.whitenoise", "python39Packages.dj-database-url"]
 
 [phases.install]
-cmds = ["pip3 install -r requirements.txt"]
+cmds = []
 
 [phases.build]
 cmds = ["cd backend && python3 manage.py collectstatic --noinput"]
