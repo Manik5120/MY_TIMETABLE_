@@ -1,2 +1,2 @@
-web: cd backend && python3 manage.py migrate && python3 manage.py create_timeslots && gunicorn --bind 0.0.0.0:$PORT my_timetable.wsgi:application
-release: cd backend && pip3 install -r ../requirements.txt && python3 manage.py collectstatic --noinput
+web: cd backend && python3 manage.py migrate --settings=my_timetable.settings_production && python3 manage.py create_timeslots --settings=my_timetable.settings_production && gunicorn --bind 0.0.0.0:$PORT my_timetable.wsgi:application --env DJANGO_SETTINGS_MODULE=my_timetable.settings_production
+release: cd backend && pip3 install -r ../requirements.txt && python3 manage.py collectstatic --noinput --settings=my_timetable.settings_production
