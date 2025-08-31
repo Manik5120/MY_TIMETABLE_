@@ -11,7 +11,7 @@
 Go to **Variables** tab and add:
 
 ```
-SECRET_KEY=your-secret-key-here
+SECRET_KEY=(r6i8@30!e^ne%muo_cq843jdg083yrbo==a_ads6x^m+^it72
 DEBUG=False
 EMAIL_HOST_USER=bhagatmanik4321@gmail.com
 EMAIL_HOST_PASSWORD=xvde dtop bxvq rayh
@@ -38,7 +38,3 @@ EMAIL_HOST_PASSWORD=xvde dtop bxvq rayh
 
 Replace `xxxx` with your actual Railway app ID.
 
-## ✅ **Current Status:**
-- PostgreSQL package errors: FIXED ✅
-- Using Railway's native Python builder: FIXED ✅
-- Next: Wait for snapshot to complete and deployment to succeed
