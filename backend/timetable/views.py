@@ -7,6 +7,12 @@ from .models import Faculty, Subject, TimeSlot, Availability, Timetable
 import random
 from django.utils import timezone
 
+def home_view(request):
+    """Handle the root URL - redirect authenticated users to dashboard, others to login"""
+    if request.user.is_authenticated:
+        return redirect('dashboard')
+    return redirect('login')
+
 def login_view(request):
     if request.method == 'POST':
         username = request.POST.get('username')

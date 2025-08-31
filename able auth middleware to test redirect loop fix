@@ -1,5 +1,0 @@
-[33mb632209[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m)[m Fix redirect loop: add proper /login/ path and update authentication settings
-[33md888389[m Add staticfiles directory creation to eliminate warning
-[33m0f9857c[m Fix static files: update storage and ensure collectstatic runs during deployment
-[33m49b731f[m Fix redirect loop: disable SSL redirects and fix authentication URLs
-[33m814084a[m Update deployment guide and trigger fresh deployment
