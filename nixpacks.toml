@@ -2,7 +2,7 @@
 nixPkgs = ["python39"]
 
 [phases.install]
-cmds = ["pip3 install --user -r requirements.txt"]
+cmds = []
 
 [phases.build]
 cmds = ["cd backend && python3 manage.py collectstatic --noinput"]
