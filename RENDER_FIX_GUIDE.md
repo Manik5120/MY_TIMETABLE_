@@ -4,15 +4,28 @@
 
 The app will now **deploy successfully** even if the database isn't configured. It will use SQLite as a fallback, so your app will be live and working.
 
+## 🔍 First: Check Your Web Service
+
+1. In your Render dashboard, look at **"Ungrouped Services"** section
+2. Find your web service (should be named `mytimetable` or similar)
+3. Click on it to open the service details
+4. Go to the **"Logs"** tab
+5. Check the latest deployment logs to see what error is happening
+6. Share the error message if deployment is still failing
+
 ## 🔧 Steps to Fix Database Connection in Render
 
-### Step 1: Check Your Database Status
-1. Go to [Render Dashboard](https://dashboard.render.com)
-2. Click on **"PostgreSQL"** in the left sidebar
-3. Find your database: **`mytimetable-db`**
-4. Check if it shows **"Available"** status
+### Step 1: Check if Database Exists
+1. In Render dashboard, look at **"Ungrouped Services"**
+2. Check if you see a **PostgreSQL** service (it might be named `mytimetable-db` or similar)
+3. If you DON'T see a PostgreSQL database:
+   - Click **"+ New"** button (top right)
+   - Select **"PostgreSQL"**
+   - Name it: `mytimetable-db`
+   - Choose **"Free"** plan
+   - Click **"Create Database"**
+4. If database exists, make sure it shows **"Available"** status
    - If it's **"Paused"**, click **"Resume"** to start it
-   - If it doesn't exist, create a new PostgreSQL database
 
 ### Step 2: Link Database to Web Service
 1. Go to your **PostgreSQL database** (`mytimetable-db`)
