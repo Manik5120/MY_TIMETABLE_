@@ -9,7 +9,7 @@ python manage.py collectstatic --noinput --settings=my_timetable.settings_render
 
 # Try to run migrations (non-blocking - app will start even if this fails)
 echo "Running migrations..."
-python manage.py migrate --settings=my_timetable.settings_render || {
+python manage.py migrate --settings=my_timetable.settings_render 2>&1 || {
     echo "Warning: Migrations failed. App will start anyway."
     echo "This is OK if using SQLite or if database is not yet configured."
 }
