@@ -4,7 +4,7 @@ services:
     env: python
     plan: free
     buildCommand: pip install --upgrade pip && pip install -r requirements.txt
-    startCommand: cd backend && python manage.py migrate --settings=my_timetable.settings_render && (python manage.py create_timeslots --settings=my_timetable.settings_render || true) && python manage.py collectstatic --noinput --settings=my_timetable.settings_render && gunicorn --bind 0.0.0.0:$PORT my_timetable.wsgi:application
+    startCommand: cd backend && python manage.py migrate --settings=my_timetable.settings_render && python manage.py collectstatic --noinput --settings=my_timetable.settings_render && gunicorn my_timetable.wsgi:application --bind 0.0.0.0:$PORT
     envVars:
       - key: PYTHON_VERSION
         value: 3.9.16
