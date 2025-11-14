@@ -66,20 +66,37 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'my_timetable.wsgi.application'
 
-# Database - Use Render's PostgreSQL
-# Get DATABASE_URL from environment, with fallback to sqlite for local dev
-database_url = os.environ.get('DATABASE_URL')
-if database_url:
-    # Parse and configure PostgreSQL database
-    DATABASES = {
-        'default': dj_database_url.config(
+# Database - Use Render's PostgreSQL or fallback to SQLite
+# Try to use PostgreSQL if DATABASE_URL is available and valid
+database_url = os.environ.get('DATABASE_URL', '').strip()
+
+# Check if DATABASE_URL looks valid (contains postgres:// or postgresql://)
+if database_url and ('postgres://' in database_url or 'postgresql://' in database_url):
+    try:
+        # Parse and configure PostgreSQL database
+        db_config = dj_database_url.config(
             default=database_url,
             conn_max_age=600,
             conn_health_checks=True,
         )
-    }
+        # Only use PostgreSQL if we got a valid config
+        if db_config and 'ENGINE' in db_config and 'postgresql' in db_config.get('ENGINE', ''):
+            DATABASES = {'default': db_config}
+        else:
+            raise ValueError("Invalid PostgreSQL configuration")
+    except Exception as e:
+        # If PostgreSQL config fails, use SQLite
+        print(f"Warning: Could not configure PostgreSQL: {e}")
+        print("Using SQLite as fallback. App will work but data won't persist.")
+        DATABASES = {
+            'default': {
+                'ENGINE': 'django.db.backends.sqlite3',
+                'NAME': BASE_DIR / 'db.sqlite3',
+            }
+        }
 else:
-    # Fallback to sqlite if DATABASE_URL not set
+    # Use SQLite if DATABASE_URL is not set or invalid
+    print("DATABASE_URL not set or invalid. Using SQLite.")
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.sqlite3',

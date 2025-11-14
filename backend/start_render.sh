@@ -9,14 +9,12 @@ python manage.py collectstatic --noinput --settings=my_timetable.settings_render
 
 # Try to run migrations (non-blocking - app will start even if this fails)
 echo "Running migrations..."
-timeout 30 python manage.py migrate --settings=my_timetable.settings_render || {
+if timeout 30 python manage.py migrate --settings=my_timetable.settings_render 2>&1; then
+    echo "Migrations completed successfully."
+else
     echo "Warning: Migrations failed or timed out. App will start anyway."
-    echo "Database may not be ready yet or DATABASE_URL may be incorrect."
-    echo "Please check:"
-    echo "1. Database is created and running in Render"
-    echo "2. Database is linked to this web service"
-    echo "3. DATABASE_URL environment variable is set"
-}
+    echo "This is OK if using SQLite or if database is not yet configured."
+fi
 
 # Start gunicorn
 echo "Starting gunicorn..."
