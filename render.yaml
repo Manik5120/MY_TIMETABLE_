@@ -3,8 +3,8 @@ services:
     name: mytimetable
     env: python
     plan: free
-    buildCommand: pip install -r requirements.txt
-    startCommand: cd backend && python manage.py migrate --settings=my_timetable.settings_render && python manage.py create_timeslots --settings=my_timetable.settings_render && python manage.py collectstatic --noinput --settings=my_timetable.settings_render && gunicorn --bind 0.0.0.0:$PORT my_timetable.wsgi:application --env DJANGO_SETTINGS_MODULE=my_timetable.settings_render
+    buildCommand: pip install --upgrade pip && pip install -r requirements.txt
+    startCommand: cd backend && python manage.py migrate --settings=my_timetable.settings_render && python manage.py create_timeslots --settings=my_timetable.settings_render && python manage.py collectstatic --noinput --settings=my_timetable.settings_render && DJANGO_SETTINGS_MODULE=my_timetable.settings_render gunicorn --bind 0.0.0.0:$PORT my_timetable.wsgi:application
     envVars:
       - key: PYTHON_VERSION
         value: 3.9.16
