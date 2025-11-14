@@ -1,5 +1,5 @@
 #!/bin/bash
-set -e
+# Don't use set -e so we can handle errors gracefully
 
 cd backend
 
