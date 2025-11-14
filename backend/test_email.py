@@ -1,7 +1,7 @@
-from django.core.mail import send_mail
-from django.conf import settings
+from django.core.mail import send_mail  # type: ignore
+from django.conf import settings  # type: ignore
 import os
-import django
+import django  # type: ignore
 
 # Set up Django environment
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'my_timetable.settings')
