@@ -67,12 +67,25 @@ TEMPLATES = [
 WSGI_APPLICATION = 'my_timetable.wsgi.application'
 
 # Database - Use Render's PostgreSQL
-DATABASES = {
-    'default': dj_database_url.config(
-        default=os.environ.get('DATABASE_URL', 'sqlite:///db.sqlite3'),
-        conn_max_age=600
-    )
-}
+# Get DATABASE_URL from environment, with fallback to sqlite for local dev
+database_url = os.environ.get('DATABASE_URL')
+if database_url:
+    # Parse and configure PostgreSQL database
+    DATABASES = {
+        'default': dj_database_url.config(
+            default=database_url,
+            conn_max_age=600,
+            conn_health_checks=True,
+        )
+    }
+else:
+    # Fallback to sqlite if DATABASE_URL not set
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / 'db.sqlite3',
+        }
+    }
 
 # Password validation
 AUTH_PASSWORD_VALIDATORS = [
